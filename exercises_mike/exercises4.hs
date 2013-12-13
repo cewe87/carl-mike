@@ -91,27 +91,16 @@ game = do
 
 -- Exercise 5 a
 
-listOf' :: Integer -> Gen a -> Gen [a]
+listOf' :: Int -> Gen a -> Gen [a]
 listOf' i g = sequence [ g | x <- [1..i]]
 
-data GeneratedList = Gen [Integer]
-	deriving Show
+prop_listOf :: Int -> Property
+prop_listOf n = forAll (listOf' n (return ())) (\xs -> (length xs == n))
 
-instance Arbitrary GeneratedList where
-	arbitrary = do
-				x <- listOf' 1 (Gen Integer)
-				return (Gen [x])
-
---TODO!! How to test gen
-prop_listOf :: Gen Integer -> Gen Bool
-prop_listOf g = do
-					xs <- listOf' 1 g
-					x <- g
-					return (x `elem` xs)
 
 -- Exercise 5 b
 
-pairOfLists :: Gen Integer -> Gen a -> Gen ([a],[a])
+pairOfLists :: Gen Int -> Gen a -> Gen ([a],[a])
 pairOfLists gi ga =	do 
 						i <- gi
 						li <- listOf' i ga

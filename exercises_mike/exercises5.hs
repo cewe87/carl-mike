@@ -87,6 +87,27 @@ ntree = frequency [(3, return NilT),
 							return (Node x t t'))
 				  ]
 
+-- Exercise 1 
+
+data DTree = File String
+	       | Directory String [DTree]
+			deriving (Eq, Show)
+
+--instance Arbitrary DTree where
+--	arbitrary = dtree
+
+--dtree :: Gen DTree
+--dtree = frequency [
+--					(3, return ( File "(arbitrary :: Gen String)" ) ),
+--					(2, return ( Directory [(arbitrary :: dtree)] ) )
+--				  ]
+
+exampleDir = Directory "A" ([Directory "B" ([File "Magass"]), Directory "C" ([File "M"])])
+
+search :: String -> DTree ->  String
+search needle (File s) 		   = "/" ++ s
+search needle (Directory x:xs) = search x 
+
 
 
 
